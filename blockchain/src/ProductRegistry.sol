@@ -8,6 +8,27 @@ pragma solidity ^0.8.19;
  * @author UNORTHOD0xd
  */
 
+    // Layout of Contract:
+    // version
+    // imports
+    // interfaces, libraries, contracts
+    // errors
+    // Type declarations
+    // State variables
+    // Events
+    // Modifiers
+    // Functions
+
+    // Layout of Functions:
+    // constructor
+    // receive function (if exists)
+    // fallback function (if exists)
+    // external
+    // public
+    // internal
+    // private
+    // view & pure functions
+
 contract productRegistry {
     
     // Enums for product status and roles
@@ -57,4 +78,4 @@ contract productRegistry {
     event StatusUpdated(uint256 indexed productId, Status newStatus);
     event RoleAssigned(address indexed user, Role role);
     event TemperatureAlert(uint256 indexed productId, int256 temperature);
-}
+}           
