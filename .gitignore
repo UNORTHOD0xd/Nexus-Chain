@@ -46,3 +46,6 @@ blockchain/typechain-types/
 # Misc
 .eslintcache
 .cache
+
+# Claude Code Context
+claude.md

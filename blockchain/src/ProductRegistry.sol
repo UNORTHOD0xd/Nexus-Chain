@@ -11,8 +11,8 @@ pragma solidity ^0.8.19;
 contract productRegistry {
     
     // Enums for product status and roles
-    enum Status memory { Manufactured, InTransit, InWarehouse, Customs, Delivered, Verified }
-    enum Role memory { None, Manufacturer, Logistics, Retailer, Consumer }
+    enum Status { Manufactured, InTransit, InWarehouse, Customs, Delivered, Verified }
+    enum Role { None, Manufacturer, Logistics, Retailer, Consumer }
 
     // Product structure 
     struct Product {

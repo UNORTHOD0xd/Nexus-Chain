@@ -1,0 +1,51 @@
+// Prisma Schema for NexusChain
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String
+  role          String    // MANUFACTURER, LOGISTICS, RETAILER, CONSUMER
+  walletAddress String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  products      Product[]
+}
+
+model Product {
+  id              String       @id @default(uuid())
+  blockchainId    Int          @unique
+  name            String
+  batchNumber     String
+  qrCode          String       @unique
+  manufacturerId  String
+  manufacturer    User         @relation(fields: [manufacturerId], references: [id])
+  currentStatus   String
+  currentLocation String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  checkpoints     Checkpoint[]
+}
+
+model Checkpoint {
+  id          String   @id @default(uuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  location    String
+  latitude    Float?
+  longitude   Float?
+  status      String
+  temperature Float?
+  notes       String?
+  handler     String
+  timestamp   DateTime @default(now())
+}

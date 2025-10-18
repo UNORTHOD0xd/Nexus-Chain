@@ -1,0 +1,10 @@
+{
+  "productRegistry": {
+    "address": "UPDATE_AFTER_DEPLOYMENT",
+    "network": "mumbai"
+  },
+  "paymentEscrow": {
+    "address": "UPDATE_AFTER_DEPLOYMENT",
+    "network": "mumbai"
+  }
+}
