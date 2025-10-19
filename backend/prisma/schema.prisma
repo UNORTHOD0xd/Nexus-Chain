@@ -1,4 +1,4 @@
-// Prisma Schema for NexusChain
+// Prisma Schema for NexusChain - Enhanced Version
 
 generator client {
   provider = "prisma-client-js"
@@ -9,43 +9,127 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enums for type safety
+enum UserRole {
+  MANUFACTURER
+  LOGISTICS
+  RETAILER
+  CONSUMER
+  ADMIN
+}
+
+enum ProductStatus {
+  REGISTERED
+  IN_TRANSIT
+  DELIVERED
+  VERIFIED
+  RECALLED
+}
+
+enum ProductCategory {
+  PHARMACEUTICALS
+  ELECTRONICS
+  LUXURY_GOODS
+  FOOD_BEVERAGE
+  AUTOMOTIVE
+  OTHER
+}
+
+// User model
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
-  password      String
+  password      String    // Hashed with bcrypt
   name          String
-  role          String    // MANUFACTURER, LOGISTICS, RETAILER, CONSUMER
-  walletAddress String?
+  role          UserRole  @default(CONSUMER)
+  walletAddress String?   @unique
+  company       String?
+  phone         String?
+  isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  products      Product[]
+
+  // Relations
+  products      Product[] @relation("ManufacturedProducts")
+  checkpoints   Checkpoint[]
+
+  @@index([email])
+  @@index([walletAddress])
+  @@map("users")
 }
 
+// Product model
 model Product {
-  id              String       @id @default(uuid())
-  blockchainId    Int          @unique
-  name            String
-  batchNumber     String
-  qrCode          String       @unique
-  manufacturerId  String
-  manufacturer    User         @relation(fields: [manufacturerId], references: [id])
-  currentStatus   String
-  currentLocation String?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  checkpoints     Checkpoint[]
+  id                String          @id @default(uuid())
+  productId         String          @unique  // User-facing ID (e.g., PFZ-CV19-001)
+  name              String
+  description       String?         @db.Text
+  category          ProductCategory @default(OTHER)
+
+  // Manufacturing info
+  manufacturerId    String
+  manufacturer      User            @relation("ManufacturedProducts", fields: [manufacturerId], references: [id])
+  manufacturingDate DateTime
+  expiryDate        DateTime?
+  batchNumber       String?
+
+  // Location & Status
+  originLocation    String
+  currentLocation   String?
+  currentStatus     ProductStatus   @default(REGISTERED)
+
+  // Temperature tracking
+  minTemperature    Float?
+  maxTemperature    Float?
+
+  // Blockchain integration
+  blockchainHash    String?         @unique
+  blockchainId      Int?            @unique
+  qrCode            String?         @unique
+
+  // Metadata
+  isActive          Boolean         @default(true)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  // Relations
+  checkpoints       Checkpoint[]
+
+  @@index([productId])
+  @@index([manufacturerId])
+  @@index([currentStatus])
+  @@index([category])
+  @@map("products")
 }
 
+// Checkpoint model
 model Checkpoint {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   productId   String
-  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product     Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Location data
   location    String
   latitude    Float?
   longitude   Float?
-  status      String
+
+  // Status tracking
+  status      ProductStatus
   temperature Float?
-  notes       String?
-  handler     String
-  timestamp   DateTime @default(now())
+  humidity    Float?
+
+  // Metadata
+  notes       String?       @db.Text
+  handledBy   String?       // User ID
+  handler     User?         @relation(fields: [handledBy], references: [id])
+
+  // Blockchain
+  blockchainHash String?
+
+  timestamp   DateTime      @default(now())
+  createdAt   DateTime      @default(now())
+
+  @@index([productId])
+  @@index([timestamp])
+  @@map("checkpoints")
 }
