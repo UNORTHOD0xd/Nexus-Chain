@@ -43,18 +43,21 @@ export default function DashboardPage() {
     );
   }
 
+  // Extract products array from response
+  const productsArray = products?.data?.products || products?.products || [];
+
   // Filter products based on search and status
-  const filteredProducts = products?.filter((product) => {
+  const filteredProducts = productsArray.filter((product) => {
     const matchesSearch =
       !searchQuery ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.productId.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesStatus =
-      statusFilter === 'ALL' || product.status === statusFilter;
+      statusFilter === 'ALL' || product.currentStatus === statusFilter;
 
     return matchesSearch && matchesStatus;
-  }) || [];
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">

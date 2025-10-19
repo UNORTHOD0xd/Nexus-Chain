@@ -19,20 +19,34 @@ export function AuthProvider({ children }) {
         const storedToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
         const storedUser = localStorage.getItem(STORAGE_KEYS.USER_DATA);
 
-        if (storedToken && storedUser) {
-          setToken(storedToken);
-          setUser(JSON.parse(storedUser));
-
-          // Verify token is still valid
+        // Check if stored values are valid (not "undefined" string)
+        if (storedToken && storedToken !== 'undefined' &&
+            storedUser && storedUser !== 'undefined') {
           try {
-            const response = await authAPI.me();
-            setUser(response.user);
-            localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
-          } catch (error) {
-            // Token invalid, clear auth
-            console.error('Token validation failed:', error);
+            const parsedUser = JSON.parse(storedUser);
+            setToken(storedToken);
+            setUser(parsedUser);
+
+            // Verify token is still valid
+            try {
+              const response = await authAPI.me();
+              // Backend returns {success, data: {user}}
+              const userData = response.data?.user || response.user;
+              setUser(userData);
+              localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+            } catch (error) {
+              // Token invalid, clear auth
+              console.error('Token validation failed:', error);
+              clearAuth();
+            }
+          } catch (parseError) {
+            // Invalid JSON in storage, clear it
+            console.error('Failed to parse stored user data:', parseError);
             clearAuth();
           }
+        } else {
+          // Clear any invalid stored data
+          clearAuth();
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
@@ -65,16 +79,19 @@ export function AuthProvider({ children }) {
       setError(null);
       const response = await authAPI.login(email, password);
 
+      // Backend returns {success, data: {user, token}}
+      const { user, token } = response.data;
+
       // Store token and user data
-      setToken(response.token);
-      setUser(response.user);
-      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.token);
-      localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
+      setToken(token);
+      setUser(user);
+      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+      localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(user));
 
       return {
         success: true,
         message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
-        user: response.user
+        user: user
       };
     } catch (error) {
       setError(error.message || 'Login failed');
@@ -91,16 +108,19 @@ export function AuthProvider({ children }) {
       setError(null);
       const response = await authAPI.register(userData);
 
+      // Backend returns {success, data: {user, token}}
+      const { user, token } = response.data;
+
       // Store token and user data
-      setToken(response.token);
-      setUser(response.user);
-      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.token);
-      localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
+      setToken(token);
+      setUser(user);
+      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+      localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(user));
 
       return {
         success: true,
         message: SUCCESS_MESSAGES.REGISTER_SUCCESS,
-        user: response.user
+        user: user
       };
     } catch (error) {
       setError(error.message || 'Registration failed');
