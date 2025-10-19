@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Providers } from "@/lib/providers";
 
 export const metadata = {
   title: "NexusChain - Blockchain Supply Chain Tracker",
@@ -9,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
