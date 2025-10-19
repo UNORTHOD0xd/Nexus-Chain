@@ -3,38 +3,53 @@
 import { useState } from 'react';
 import { QrCode, Search, Package, ArrowLeft, Shield, CheckCircle2, XCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { productsAPI } from '@/services/api';
+import { Button, LoadingSpinner } from '@/components/common';
 
 export default function VerifyProductPage() {
+  const router = useRouter();
   const [productId, setProductId] = useState('');
   const [scanning, setScanning] = useState(false);
   const [verificationResult, setVerificationResult] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleVerify = async () => {
     if (!productId.trim()) return;
 
-    // Simulate verification (replace with actual API call)
-    setScanning(true);
-    setTimeout(() => {
+    try {
+      setScanning(true);
+      setError(null);
+
+      // Try to verify by product ID
+      const product = await productsAPI.verifyByProductId(productId);
+
+      if (product) {
+        setVerificationResult({
+          verified: true,
+          product: product,
+        });
+      } else {
+        setVerificationResult({
+          verified: false,
+          product: null,
+        });
+      }
+    } catch (err) {
+      console.error('Verification error:', err);
       setVerificationResult({
-        verified: true,
-        product: {
-          name: 'Pfizer COVID-19 Vaccine',
-          id: productId,
-          manufacturer: 'Pfizer Inc.',
-          category: 'Pharmaceuticals',
-          status: 'In Transit',
-          manufacturingDate: '2025-01-15',
-          checkpoints: 3,
-          currentLocation: 'Distribution Center, Boston MA'
-        }
+        verified: false,
+        product: null,
       });
+      setError(err.response?.data?.message || 'Product not found');
+    } finally {
       setScanning(false);
-    }, 1500);
+    }
   };
 
   const handleScanQR = () => {
     // This would open QR scanner in a real implementation
-    alert('QR Scanner would open here. Integration with @zxing/browser library needed.');
+    alert('QR Scanner would open here. Camera integration with @zxing/browser library will be added.');
   };
 
   return (
@@ -193,10 +208,14 @@ export default function VerifyProductPage() {
                   </div>
 
                   <div className="pt-4">
-                    <button className="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:shadow-blue-500/50 transition font-semibold flex items-center justify-center gap-2">
-                      <Package className="w-5 h-5" />
+                    <Button
+                      variant="primary"
+                      className="w-full"
+                      onClick={() => router.push(`/products/${verificationResult.product.id}`)}
+                    >
+                      <Package className="w-5 h-5 mr-2" />
                       View Complete Product Journey
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}

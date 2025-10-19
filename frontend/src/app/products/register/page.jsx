@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Package, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { LoadingSpinner } from '@/components/common';
+import { ProductRegistrationForm } from '@/components/products';
 
 export default function RegisterProductPage() {
   const router = useRouter();
@@ -73,130 +74,7 @@ export default function RegisterProductPage() {
 
           {/* Registration Form */}
           <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8">
-            <div className="space-y-6">
-              {/* Product Name */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Product Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Pfizer COVID-19 Vaccine"
-                  className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"
-                />
-              </div>
-
-              {/* Product ID/SKU */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Product ID / SKU
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., PFZ-CV19-001"
-                  className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"
-                />
-              </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Category
-                </label>
-                <select className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-blue-500 transition">
-                  <option value="">Select a category</option>
-                  <option value="PHARMACEUTICALS">Pharmaceuticals</option>
-                  <option value="ELECTRONICS">Electronics</option>
-                  <option value="LUXURY_GOODS">Luxury Goods</option>
-                  <option value="FOOD_BEVERAGE">Food & Beverage</option>
-                  <option value="AUTOMOTIVE">Automotive Parts</option>
-                  <option value="OTHER">Other</option>
-                </select>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Description
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder="Detailed product description..."
-                  className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition resize-none"
-                />
-              </div>
-
-              {/* Manufacturing Date */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Manufacturing Date
-                  </label>
-                  <input
-                    type="date"
-                    className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-blue-500 transition"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Expiry Date (Optional)
-                  </label>
-                  <input
-                    type="date"
-                    className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-blue-500 transition"
-                  />
-                </div>
-              </div>
-
-              {/* Origin Location */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Origin Location
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., New York, USA"
-                  className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"
-                />
-              </div>
-
-              {/* Temperature Requirements */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Min Temperature (°C)
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="e.g., -70"
-                    className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Max Temperature (°C)
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="e.g., -60"
-                    className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"
-                  />
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4 pt-6">
-                <Link
-                  href="/"
-                  className="flex-1 px-6 py-3 rounded-lg border-2 border-slate-700 hover:border-slate-600 transition text-center font-semibold"
-                >
-                  Cancel
-                </Link>
-                <button className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:shadow-blue-500/50 transition font-semibold">
-                  Register Product on Blockchain
-                </button>
-              </div>
-            </div>
+            <ProductRegistrationForm />
           </div>
 
           {/* Info Box */}
