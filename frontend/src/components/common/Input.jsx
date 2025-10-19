@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { cn } from '@/utils/cn';
 
 /**
@@ -10,7 +11,7 @@ import { cn } from '@/utils/cn';
  * @param {React.ReactNode} props.icon - Icon to display
  * @param {string} props.className - Additional CSS classes
  */
-export default function Input({
+const Input = forwardRef(({
   label,
   error,
   helperText,
@@ -20,7 +21,7 @@ export default function Input({
   id,
   type = 'text',
   ...props
-}) {
+}, ref) => {
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -43,6 +44,7 @@ export default function Input({
         )}
 
         <input
+          ref={ref}
           id={inputId}
           type={type}
           className={cn(
@@ -73,4 +75,8 @@ export default function Input({
       )}
     </div>
   );
-}
+});
+
+Input.displayName = 'Input';
+
+export default Input;

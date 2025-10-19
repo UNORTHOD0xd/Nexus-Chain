@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { cn } from '@/utils/cn';
 
 /**
@@ -10,7 +11,7 @@ import { cn } from '@/utils/cn';
  * @param {number} props.rows - Number of visible rows
  * @param {string} props.className - Additional CSS classes
  */
-export default function Textarea({
+const Textarea = forwardRef(({
   label,
   error,
   helperText,
@@ -19,7 +20,7 @@ export default function Textarea({
   className,
   id,
   ...props
-}) {
+}, ref) => {
   const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -35,6 +36,7 @@ export default function Textarea({
       )}
 
       <textarea
+        ref={ref}
         id={textareaId}
         rows={rows}
         className={cn(
@@ -64,4 +66,8 @@ export default function Textarea({
       )}
     </div>
   );
-}
+});
+
+Textarea.displayName = 'Textarea';
+
+export default Textarea;
