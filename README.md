@@ -201,32 +201,32 @@ Nexus-Chain/
 - MetaMask wallet with Sepolia testnet ETH ([Get free testnet ETH](https://sepoliafaucet.com/))
 - PostgreSQL database (we recommend [Supabase](https://supabase.com) free tier)
 
-### Option 1: Docker (Recommended)
+### Option 1: Docker (Recommended) - One Command Setup!
 
 ```bash
 # Clone repository
 git clone https://github.com/UNORTHOD0xd/Nexus-Chain.git
 cd Nexus-Chain
 
-# Setup backend environment
-cd backend
-cp .env.example .env
-# Edit .env with your database URL and JWT secret (see ENV_SETUP.md)
+# Run the entire app with one command!
+docker-compose up -d --build
 
-# Setup frontend environment
-cd ../frontend
-cp .env.local.example .env.local
-# Contract addresses are pre-configured for Sepolia
-
-# Run with Docker Compose (from root directory)
-cd ..
-docker-compose up --build
+# Or use the convenience script:
+./start.sh
 
 # Access the application:
 # Frontend: http://localhost:3001
 # Backend API: http://localhost:3000
 # Backend Health: http://localhost:3000/health
+
+# View logs:
+docker-compose logs -f
+
+# Stop services:
+docker-compose down
 ```
+
+**Note:** The `.env` file is already configured with demo credentials and Sepolia testnet contracts.
 
 See [DOCKER.md](./DOCKER.md) for full Docker guide.
 
