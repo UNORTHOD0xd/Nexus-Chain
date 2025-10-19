@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { cn } from '@/utils/cn';
 
 /**
@@ -5,21 +6,23 @@ import { cn } from '@/utils/cn';
  * @param {Object} props
  * @param {string} props.label - Select label
  * @param {Array} props.options - Options array [{value, label}]
+ * @param {React.ReactNode} props.children - Child option elements (alternative to options prop)
  * @param {string} props.error - Error message
  * @param {boolean} props.required - Required field indicator
  * @param {string} props.placeholder - Placeholder text
  * @param {string} props.className - Additional CSS classes
  */
-export default function Select({
+const Select = forwardRef(({
   label,
   options = [],
+  children,
   error,
   required = false,
   placeholder = 'Select an option',
   className,
   id,
   ...props
-}) {
+}, ref) => {
   const selectId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -35,6 +38,7 @@ export default function Select({
       )}
 
       <select
+        ref={ref}
         id={selectId}
         className={cn(
           'block w-full rounded-lg border px-4 py-2.5 text-gray-900 transition-colors duration-200',
@@ -48,12 +52,16 @@ export default function Select({
         aria-describedby={error ? `${selectId}-error` : undefined}
         {...props}
       >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+        {children || (
+          <>
+            {!props.value && <option value="">{placeholder}</option>}
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </>
+        )}
       </select>
 
       {error && (
@@ -63,4 +71,8 @@ export default function Select({
       )}
     </div>
   );
-}
+});
+
+Select.displayName = 'Select';
+
+export default Select;
