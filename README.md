@@ -5,16 +5,17 @@
 [![Hackathon](https://img.shields.io/badge/Hackathon-Intellibus%20AI%202025-blue)](https://intellibushackathon.com)
 [![Ethereum](https://img.shields.io/badge/Blockchain-Ethereum%20Sepolia-627EEA)](https://ethereum.org/)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.19-363636)](https://soliditylang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-000000)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18.2-61DAFB)](https://react.dev/)
-[![CI](https://github.com/UNORTHOD0xd/Nexus-Chain/actions/workflows/ci.yml/badge.svg)](https://github.com/UNORTHOD0xd/Nexus-Chain/actions)
+[![Foundry](https://img.shields.io/badge/Foundry-Framework-000000)](https://getfoundry.sh/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)](https://www.docker.com/)
-[![Production](https://img.shields.io/badge/Status-MVP%20Ready-success)](./MVP_CHECKLIST.md)
+[![Status](https://img.shields.io/badge/Status-Active%20Development-orange)](./MVP_CHECKLIST.md)
 
 > **Built in 24 hours for Intellibus AI Hackathon 2025** 🚀
 > 
 > A blockchain-powered real-time supply chain platform that eliminates counterfeit products and creates a universal nexus of trust connecting manufacturers, logistics, retailers, and consumers.
 
-**[Live Demo](https://nexuschain.vercel.app)** · **[Video Demo](https://youtu.be/YOUR_VIDEO)** · **[Slides](https://slides.com/YOUR_SLIDES)**
+**[Smart Contracts on Etherscan](https://sepolia.etherscan.io/address/0xe0c52095175ba416b886D1Bda6A4F71F1958c8b2)** · **[Documentation](./ENV_SETUP.md)** · **[Deployment Guide](./DEPLOYMENT.md)**
 
 ---
 
@@ -92,23 +93,28 @@ NexusChain creates a universal connection point where blockchain immutability me
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Consumer Interface                        │
-│          React + Tailwind + WebSockets + Maps                │
+│                    Frontend (Next.js 14)                     │
+│       React 18 + Tailwind + Socket.io Client + Leaflet      │
+│                  Port 3001 (Development)                     │
 └───────────────────────┬─────────────────────────────────────┘
-                        │ REST API + Real-time Events
+                        │
+              REST API + WebSocket Events
+                        │
 ┌───────────────────────┴─────────────────────────────────────┐
-│                  Application Layer                           │
-│     Node.js + Express + Socket.io + Event Streaming          │
+│              Backend (Node.js + Express)                     │
+│         Socket.io Server + Prisma ORM + Winston              │
+│                  Port 3000 (Development)                     │
 └──────┬──────────────┬────────────────────┬──────────────────┘
        │              │                    │
        ↓              ↓                    ↓
 ┌──────────┐   ┌─────────────┐    ┌──────────────┐
-│PostgreSQL│   │  Sepolia    │    │ IPFS Storage │
-│   Data   │   │ Blockchain  │    │  Documents   │
+│PostgreSQL│   │  Ethereum   │    │  Ethers.js   │
+│(Supabase)│   │   Sepolia   │    │ Web3 Provider│
+│ + Prisma │   │  Testnet    │    │              │
 └──────────┘   └─────────────┘    └──────────────┘
                │
-               ├─ ProductRegistry.sol (Core tracking)
-               └─ PaymentEscrow.sol (Automated payments)
+               ├─ ProductRegistry.sol (0xe0c5...c8b2)
+               └─ PaymentEscrow.sol (0x4161...EB63)
 ```
 
 ---
@@ -118,20 +124,71 @@ NexusChain creates a universal connection point where blockchain immutability me
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
 | **Blockchain** | Solidity 0.8.19 | Smart contract logic |
-| | Foundry | Development & testing |
-| | Ethereum Sepolia | Ethereum testnet for development |
-| | Ethers.js | Web3 integration |
-| **Backend** | Node.js + Express | REST API server |
-| | Socket.io | Real-time WebSocket events |
-| | PostgreSQL + Prisma | Structured data storage |
-| | Kafka | Event streaming pipeline |
-| **Frontend** | React 18 + Vite | Modern UI framework |
-| | Tailwind CSS | Rapid styling |
-| | Leaflet | Interactive maps |
+| | Foundry | Development & testing framework |
+| | Ethereum Sepolia | Ethereum testnet deployment |
+| | Ethers.js 6.8 | Web3 integration |
+| **Backend** | Node.js 18+ + Express | REST API server |
+| | Socket.io 4.6 | Real-time WebSocket events |
+| | PostgreSQL + Prisma 5.6 | Database ORM and migrations |
+| | Winston | Logging infrastructure |
+| **Frontend** | Next.js 14 + React 18 | Modern React framework |
+| | Tailwind CSS 3.3 | Utility-first styling |
+| | Leaflet + React-Leaflet | Interactive maps |
 | | QRCode.react | QR generation/scanning |
-| **DevOps** | Docker | Containerization |
+| | Axios + React Query | API state management |
+| **DevOps** | Docker + Docker Compose | Containerization |
 | | GitHub Actions | CI/CD automation |
-| | AWS/Vercel | Production hosting |
+| | Vercel/Railway | Production hosting platforms |
+
+---
+
+## 📁 Project Structure
+
+```
+Nexus-Chain/
+├── blockchain/              # Smart contracts (Foundry)
+│   ├── src/
+│   │   ├── ProductRegistry.sol    # Core product tracking contract
+│   │   └── PaymentEscrow.sol      # Payment automation contract
+│   ├── test/                      # Foundry tests
+│   ├── script/                    # Deployment scripts
+│   ├── deployments/
+│   │   └── sepolia.json          # Deployed contract addresses
+│   └── foundry.toml              # Foundry configuration
+│
+├── backend/                 # Node.js API server
+│   ├── src/
+│   │   ├── server.js             # Express server entry point
+│   │   ├── controllers/          # Route controllers
+│   │   ├── routes/               # API routes
+│   │   ├── middleware/           # Auth, logging, error handling
+│   │   ├── config/               # Database and blockchain config
+│   │   └── utils/                # Helper functions
+│   ├── prisma/
+│   │   ├── schema.prisma         # Database schema
+│   │   └── seed.js               # Demo data seeding
+│   ├── .env.example              # Environment template
+│   └── package.json
+│
+├── frontend/                # Next.js 14 React app
+│   ├── src/
+│   │   ├── app/                  # Next.js app router pages
+│   │   ├── components/           # Reusable UI components
+│   │   ├── services/             # API and blockchain services
+│   │   ├── contexts/             # React contexts (auth, web3)
+│   │   ├── contracts/            # Contract ABIs
+│   │   └── utils/                # Helper functions
+│   ├── .env.local.example        # Frontend environment template
+│   └── package.json
+│
+├── .github/workflows/       # CI/CD pipelines
+├── docker-compose.yml       # Docker orchestration
+├── README.md                # This file
+├── DEPLOYMENT.md            # Production deployment guide
+├── ENV_SETUP.md             # Environment setup guide
+├── DOCKER.md                # Docker setup guide
+└── MVP_CHECKLIST.md         # Deployment checklist
+```
 
 ---
 
@@ -140,9 +197,9 @@ NexusChain creates a universal connection point where blockchain immutability me
 **Smart contracts are already deployed on Sepolia!** No blockchain deployment needed.
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 18+ and npm
 - MetaMask wallet with Sepolia testnet ETH ([Get free testnet ETH](https://sepoliafaucet.com/))
-- Supabase account (free) for database
+- PostgreSQL database (we recommend [Supabase](https://supabase.com) free tier)
 
 ### Option 1: Docker (Recommended)
 
@@ -151,16 +208,24 @@ NexusChain creates a universal connection point where blockchain immutability me
 git clone https://github.com/UNORTHOD0xd/Nexus-Chain.git
 cd Nexus-Chain
 
-# Setup environment
-cp .env.production.example .env
-# Edit .env with your values (see ENV_SETUP.md)
+# Setup backend environment
+cd backend
+cp .env.example .env
+# Edit .env with your database URL and JWT secret (see ENV_SETUP.md)
 
-# Run with Docker Compose
+# Setup frontend environment
+cd ../frontend
+cp .env.local.example .env.local
+# Contract addresses are pre-configured for Sepolia
+
+# Run with Docker Compose (from root directory)
+cd ..
 docker-compose up --build
 
-# Access:
+# Access the application:
 # Frontend: http://localhost:3001
-# Backend: http://localhost:3000
+# Backend API: http://localhost:3000
+# Backend Health: http://localhost:3000/health
 ```
 
 See [DOCKER.md](./DOCKER.md) for full Docker guide.
@@ -176,25 +241,38 @@ cd Nexus-Chain
 cd backend
 npm install
 cp .env.example .env
-# Edit .env (see ENV_SETUP.md for details)
+# Edit .env with your configuration:
+#   - DATABASE_URL: Your Supabase PostgreSQL connection string
+#   - JWT_SECRET: Generate with: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+#   - Contract addresses are already configured
+
+# Initialize database
+npx prisma generate
 npx prisma db push
 npm run db:seed  # Load demo data
+
+# Start backend server
 npm run dev      # Runs on http://localhost:3000
 
 # 3. Setup Frontend (new terminal)
 cd ../frontend
 npm install
 cp .env.local.example .env.local
-# Edit .env.local
+# Contract addresses are pre-configured, no changes needed for local dev
+
+# Start frontend
 npm run dev      # Runs on http://localhost:3001
 ```
 
-**Demo Login Credentials:**
-- Email: `manufacturer@nexuschain.com` | Password: `demo1234`
-- Email: `logistics@nexuschain.com` | Password: `demo1234`
-- Email: `consumer@nexuschain.com` | Password: `demo1234`
+**Demo Login Credentials** (after running seed):
+- **Manufacturer:** `manufacturer@nexuschain.com` | Password: `demo1234`
+- **Logistics:** `logistics@nexuschain.com` | Password: `demo1234`
+- **Consumer:** `consumer@nexuschain.com` | Password: `demo1234`
 
-See [ENV_SETUP.md](./ENV_SETUP.md) for complete setup guide.
+**Detailed Setup Guides:**
+- [ENV_SETUP.md](./ENV_SETUP.md) - Complete environment variable configuration
+- [DOCKER.md](./DOCKER.md) - Docker deployment guide
+- [DEPLOYMENT.md](./DEPLOYMENT.md) - Production deployment guide
 
 ### 🚀 Production Deployment
 
@@ -238,16 +316,26 @@ Ready to deploy? See [DEPLOYMENT.md](./DEPLOYMENT.md) for:
 
 ---
 
-## 🎥 Demo Walkthrough
+## 🎥 Demo & Testing
 
-**[Watch 5-Minute Demo Video](https://youtu.be/YOUR_VIDEO)**
+### Local Demo Instructions
 
-Our demo shows:
-1. **Product Registration** - Vaccine registered on blockchain in real-time
-2. **Live Tracking** - Product moves from Boston → Miami → Kingston with live map updates
-3. **Temperature Monitoring** - Cold chain compliance tracked at every checkpoint
-4. **Consumer Verification** - Instant authenticity check via QR scan
-5. **Automated Payments** - Smart contract releases funds on delivery confirmation
+1. **Start the application** (see Quick Start above)
+2. **Register a new account** or use demo credentials
+3. **Connect MetaMask** to Sepolia testnet
+4. **Get test ETH** from [Sepolia Faucet](https://sepoliafaucet.com/)
+5. **Register a product** - Creates blockchain record
+6. **View on Etherscan** - See your transaction on-chain
+
+### Planned Demo Features
+
+The complete demo will showcase:
+1. **Product Registration** - Register products on blockchain with unique IDs
+2. **Live Tracking** - Simulate product journey with checkpoint updates
+3. **Temperature Monitoring** - Track cold chain compliance
+4. **Consumer Verification** - Scan QR codes for authenticity checks
+5. **Automated Payments** - Smart contract escrow and payment release
+6. **Real-Time Updates** - WebSocket events for instant visibility
 
 ---
 
@@ -255,7 +343,9 @@ Our demo shows:
 
 ### Deployed on Sepolia Testnet
 
-**ProductRegistry.sol** - [View on Etherscan](https://sepolia.etherscan.io/address/YOUR_ADDRESS)
+**ProductRegistry.sol** - [View on Etherscan](https://sepolia.etherscan.io/address/0xe0c52095175ba416b886D1Bda6A4F71F1958c8b2)
+- **Contract Address:** `0xe0c52095175ba416b886D1Bda6A4F71F1958c8b2`
+- **Verified:** ✅ Yes
 ```solidity
 // Core functions
 registerProduct(name, batchNumber) → returns productId
@@ -264,7 +354,9 @@ transferOwnership(productId, newHolder)
 verifyProduct(productId) → returns (authentic, checkpoints)
 ```
 
-**PaymentEscrow.sol** - [View on Etherscan](https://sepolia.etherscan.io/address/YOUR_ADDRESS)
+**PaymentEscrow.sol** - [View on Etherscan](https://sepolia.etherscan.io/address/0x416133e08B0cC8804bf5A00f0e3569D4A378EB63)
+- **Contract Address:** `0x416133e08B0cC8804bf5A00f0e3569D4A378EB63`
+- **Verified:** ✅ Yes
 ```solidity
 // Payment automation
 createEscrow(productId, payee, amount)
@@ -272,27 +364,42 @@ releaseOnDelivery(productId) → auto-pays logistics
 refundPayment(escrowId) → handles disputes
 ```
 
+**Deployment Details:**
+- **Network:** Sepolia Testnet (Chain ID: 11155111)
+- **Deployer:** `0xF31A99A843bA137e19b4146c4FEa19B5A6f0c435`
+- **Gas Used:** 9,168,923 units
+- **Deployment Date:** October 19, 2025
+
 ---
 
-## 📊 Hackathon Requirements ✅
+## 📊 Project Status & Features
 
-### Real-Time Experience Criteria
+### ✅ Implemented Features
 
-✅ **Real-Time Updates** - Kafka streaming + WebSocket events for instant visibility  
-✅ **User Authentication** - JWT-based auth with role-based access control  
-✅ **Search & Personalization** - Filter products by status, location, manufacturer  
-✅ **Persisted Data Storage** - PostgreSQL for relational data, blockchain for immutable records  
-✅ **Automated Deployments** - GitHub Actions CI/CD pipeline  
-✅ **Cloud-Native Deployment** - Docker containers on AWS/Vercel  
-✅ **Multi-Platform Support** - Responsive web app + mobile-optimized QR scanner  
+✅ **Smart Contracts (Foundry)** - ProductRegistry and PaymentEscrow deployed & verified on Sepolia
+✅ **Backend API (Express)** - REST API with JWT authentication and WebSocket support
+✅ **Frontend (Next.js 14)** - Modern React UI with Tailwind CSS
+✅ **Database (PostgreSQL + Prisma)** - Schema designed and migrations ready
+✅ **Web3 Integration (Ethers.js)** - Blockchain connectivity configured
+✅ **Real-Time Infrastructure** - Socket.io setup for live updates
+✅ **Docker Support** - Full containerization with docker-compose
+✅ **CI/CD Pipeline** - GitHub Actions for automated testing and deployment
 
-### Innovation Beyond Requirements
+### 🚧 Features Under Development
 
-🌟 **Blockchain Integration** - Solidity smart contracts for immutable trust layer  
-🌟 **IoT Simulation** - Temperature and GPS sensor data streaming  
-🌟 **Interactive Mapping** - Real-time product journey visualization  
-🌟 **Payment Automation** - Smart contracts eliminate manual payment processing  
-🌟 **Consumer Verification** - QR code system for instant authenticity checks  
+🚧 **Real-Time Tracking** - WebSocket event streaming for live product updates
+🚧 **Interactive Maps** - Leaflet integration for checkpoint visualization
+🚧 **QR Code System** - Generation and scanning for product verification
+🚧 **Payment Escrow** - Smart contract integration for automated payments
+🚧 **Role-Based Access** - Manufacturer, logistics, retailer, consumer roles
+🚧 **Temperature Monitoring** - IoT sensor data simulation and tracking
+
+### 🎯 Core Innovation
+
+🌟 **Blockchain Trust Layer** - Immutable product records on Ethereum Sepolia
+🌟 **Decentralized Verification** - Consumer-facing authenticity checks
+🌟 **Smart Contract Automation** - Trustless payment escrow and custody transfers
+🌟 **Multi-Stakeholder Platform** - Connecting entire supply chain ecosystem
 
 ---
 
@@ -329,32 +436,61 @@ refundPayment(escrowId) → handles disputes
 
 ---
 
-## 👥 Team
+## 👥 Team & Contribution
 
-**Built by Team [Your Team Name] for Intellibus AI Hackathon 2025**
+**Built for Intellibus AI Hackathon 2025**
 
-- **[Name]** - Blockchain Engineer - Smart contracts & Web3 integration
-- **[Name]** - Backend Developer - API, real-time systems, database
-- **[Name]** - Frontend Developer - React UI, maps, real-time updates
-- **[Name]** - Full-Stack/DevOps - Integration, deployment, infrastructure
+**Developer:** UNORTHOD0xd
+- Full-stack blockchain development
+- Smart contract architecture (Solidity + Foundry)
+- Backend API design (Node.js + Express + Prisma)
+- Frontend development (Next.js + React + Tailwind)
+- DevOps & deployment (Docker + CI/CD)
+
+**Contributions Welcome!** This is an open-source project. Feel free to:
+- Report issues
+- Submit pull requests
+- Suggest features
+- Improve documentation
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Phase 1: Hackathon MVP (Completed in 24 hours)
-- Smart contract deployment on Sepolia testnet
-- Real-time tracking with WebSocket updates
-- Consumer QR verification system
-- Interactive supply chain visualization
-- Automated payment escrow
+### ✅ Phase 1: Foundation (Completed)
+- ✅ Smart contracts developed (ProductRegistry, PaymentEscrow)
+- ✅ Contracts deployed and verified on Sepolia testnet
+- ✅ Backend API architecture (Express + Prisma + Socket.io)
+- ✅ Frontend setup (Next.js 14 + React 18 + Tailwind)
+- ✅ Database schema designed (PostgreSQL + Prisma)
+- ✅ Web3 integration configured (Ethers.js)
+- ✅ Docker containerization
+- ✅ CI/CD pipeline (GitHub Actions)
 
-### 🔜 Phase 2: Production Ready (Next 3 months)
-- Mainnet deployment on Ethereum
-- Native mobile apps (iOS/Android)
-- Real IoT sensor integration
-- Multi-language support (Spanish, French, Mandarin)
-- Advanced analytics dashboard with AI predictions
+### 🔄 Phase 2: MVP Integration (In Progress)
+- 🔄 Complete frontend-backend integration
+- 🔄 Implement real-time WebSocket events
+- 🔄 Build interactive map visualization
+- 🔄 Develop QR code generation/scanning
+- 🔄 Connect smart contracts to backend
+- 🔄 Implement role-based access control
+- 🔄 Add comprehensive error handling
+
+### 🔜 Phase 3: Production Ready (Next Steps)
+- 📋 End-to-end testing suite
+- 📋 Performance optimization
+- 📋 Security audit
+- 📋 Production deployment (Vercel + Railway)
+- 📋 Demo video and documentation
+- 📋 Hackathon submission preparation
+
+### 🌟 Phase 4: Future Enhancements
+- Mainnet deployment on Ethereum L2 (Polygon, Arbitrum)
+- Native mobile apps (React Native)
+- Real IoT sensor integration (GPS, temperature)
+- Multi-language support
+- Advanced analytics with ML predictions
+- API marketplace for third-party integrations
 
 
 ---
@@ -371,22 +507,36 @@ refundPayment(escrowId) → handles disputes
 
 ## 🧪 Testing
 
+### Smart Contract Tests (Foundry)
 ```bash
-# Smart contract tests
 cd blockchain
-npx hardhat test
-npx hardhat coverage
-
-# Backend tests
-cd backend
-npm test
-
-# Frontend tests
-cd frontend
-npm test
+forge test              # Run all tests
+forge test --summary    # Show test summary
+forge coverage          # Generate coverage report
 ```
 
-**Test Coverage**: 85%+ across all components
+### Backend Tests
+```bash
+cd backend
+npm test                # Run backend tests (when implemented)
+```
+
+### Frontend Tests
+```bash
+cd frontend
+npm test                # Run frontend tests (when implemented)
+npm run lint            # Run ESLint
+```
+
+### Manual Testing Checklist
+- [ ] MetaMask connects to Sepolia testnet
+- [ ] User registration and login works
+- [ ] Product registration writes to blockchain
+- [ ] Real-time updates via WebSocket
+- [ ] QR code generation and scanning
+- [ ] Interactive map displays checkpoints
+
+**Current Status**: Smart contracts fully tested with Foundry. Integration tests completed manually.
 
 ---
 
@@ -458,13 +608,53 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) for deta
 
 ---
 
+## 📚 Additional Resources
+
+### Documentation
+- **[ENV_SETUP.md](./ENV_SETUP.md)** - Complete environment configuration guide
+- **[DOCKER.md](./DOCKER.md)** - Docker setup and troubleshooting
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Production deployment guide
+- **[MVP_CHECKLIST.md](./MVP_CHECKLIST.md)** - Deployment readiness checklist
+- **[Blockchain README](./blockchain/README.md)** - Smart contract documentation
+- **[Backend README](./backend/README.md)** - API documentation
+
+### Useful Links
+- **Sepolia Faucets:**
+  - [Alchemy Sepolia Faucet](https://sepoliafaucet.com/)
+  - [Infura Sepolia Faucet](https://www.infura.io/faucet/sepolia)
+- **Block Explorers:**
+  - [Sepolia Etherscan](https://sepolia.etherscan.io/)
+- **Development Tools:**
+  - [Foundry Book](https://book.getfoundry.sh/)
+  - [Ethers.js Documentation](https://docs.ethers.org/)
+  - [Prisma Documentation](https://www.prisma.io/docs)
+  - [Next.js Documentation](https://nextjs.org/docs)
+
+### Getting Help
+
+Having issues? Here's how to get help:
+
+1. **Check existing documentation** - Most common issues are covered in ENV_SETUP.md and DOCKER.md
+2. **Search GitHub Issues** - Someone may have already solved your problem
+3. **Create a new issue** - Provide:
+   - Environment (OS, Node version, etc.)
+   - Steps to reproduce
+   - Error messages and logs
+   - What you've already tried
+4. **Common Issues:**
+   - **MetaMask connection issues**: Make sure you're on Sepolia testnet (Chain ID: 11155111)
+   - **Database errors**: Check your DATABASE_URL in .env
+   - **Build errors**: Delete node_modules and reinstall: `rm -rf node_modules && npm install`
+   - **Port conflicts**: Backend runs on 3000, Frontend on 3001 - make sure ports are free
+
 ## ⭐ Support NexusChain
 
 If you believe in transparent, trustworthy supply chains, please:
 - ⭐ **Star this repo** on GitHub
-- 🐦 **Share** our demo on social media
+- 🐦 **Share** on social media
 - 💬 **Provide feedback** via GitHub Issues
 - 🤝 **Contribute** - we welcome PRs!
+- 📧 **Reach out** for collaboration opportunities
 
 ---
 
