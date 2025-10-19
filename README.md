@@ -6,6 +6,9 @@
 [![Ethereum](https://img.shields.io/badge/Blockchain-Ethereum%20Sepolia-627EEA)](https://ethereum.org/)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.19-363636)](https://soliditylang.org/)
 [![React](https://img.shields.io/badge/React-18.2-61DAFB)](https://react.dev/)
+[![CI](https://github.com/UNORTHOD0xd/Nexus-Chain/actions/workflows/ci.yml/badge.svg)](https://github.com/UNORTHOD0xd/Nexus-Chain/actions)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)](https://www.docker.com/)
+[![Production](https://img.shields.io/badge/Status-MVP%20Ready-success)](./MVP_CHECKLIST.md)
 
 > **Built in 24 hours for Intellibus AI Hackathon 2025** 🚀
 > 
@@ -134,54 +137,74 @@ NexusChain creates a universal connection point where blockchain immutability me
 
 ## 🚀 Quick Start
 
+**Smart contracts are already deployed on Sepolia!** No blockchain deployment needed.
+
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL 14+
-- MetaMask wallet with Sepolia testnet ETH
-- Git
+- MetaMask wallet with Sepolia testnet ETH ([Get free testnet ETH](https://sepoliafaucet.com/))
+- Supabase account (free) for database
 
-### 1. Clone & Install
+### Option 1: Docker (Recommended)
+
 ```bash
-git clone https://github.com/your-team/nexuschain.git
-cd nexuschain
+# Clone repository
+git clone https://github.com/UNORTHOD0xd/Nexus-Chain.git
+cd Nexus-Chain
+
+# Setup environment
+cp .env.production.example .env
+# Edit .env with your values (see ENV_SETUP.md)
+
+# Run with Docker Compose
+docker-compose up --build
+
+# Access:
+# Frontend: http://localhost:3001
+# Backend: http://localhost:3000
 ```
 
-### 2. Deploy Smart Contracts
+See [DOCKER.md](./DOCKER.md) for full Docker guide.
+
+### Option 2: Local Development
+
 ```bash
-cd blockchain
+# 1. Clone repository
+git clone https://github.com/UNORTHOD0xd/Nexus-Chain.git
+cd Nexus-Chain
+
+# 2. Setup Backend
+cd backend
 npm install
 cp .env.example .env
-# Add PRIVATE_KEY and SEPOLIA_RPC_URL to .env
-forge build
-forge script script/Deploy.s.sol:DeployAll --rpc-url $SEPOLIA_RPC --broadcast
-# Save contract addresses from output
-```
+# Edit .env (see ENV_SETUP.md for details)
+npx prisma db push
+npm run db:seed  # Load demo data
+npm run dev      # Runs on http://localhost:3000
 
-### 3. Start Backend
-```bash
-cd ../backend
-npm install
-cp .env.example .env
-# Configure DATABASE_URL and contract addresses
-npx prisma migrate dev
-npm run dev
-# Backend runs on http://localhost:3000
-```
-
-### 4. Start Frontend
-```bash
+# 3. Setup Frontend (new terminal)
 cd ../frontend
 npm install
-cp .env.example .env
-npm run dev
-# Frontend runs on http://localhost:5173
+cp .env.local.example .env.local
+# Edit .env.local
+npm run dev      # Runs on http://localhost:3001
 ```
 
-### 5. Test the Flow
-1. Register a product as manufacturer
-2. Add checkpoints as it moves
-3. Verify authenticity as consumer
-4. Watch real-time updates across all interfaces
+**Demo Login Credentials:**
+- Email: `manufacturer@nexuschain.com` | Password: `demo1234`
+- Email: `logistics@nexuschain.com` | Password: `demo1234`
+- Email: `consumer@nexuschain.com` | Password: `demo1234`
+
+See [ENV_SETUP.md](./ENV_SETUP.md) for complete setup guide.
+
+### 🚀 Production Deployment
+
+Ready to deploy? See [DEPLOYMENT.md](./DEPLOYMENT.md) for:
+- Vercel + Railway deployment (easiest)
+- AWS/GCP/Azure deployment
+- Docker deployment on VPS
+- Full CI/CD pipeline
+
+**MVP Checklist:** [MVP_CHECKLIST.md](./MVP_CHECKLIST.md)
 
 ---
 
