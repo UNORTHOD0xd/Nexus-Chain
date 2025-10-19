@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Shield, Package, MapPin, QrCode, TrendingUp, Users, ChevronRight, Menu, X, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 export default function Home() {
@@ -33,12 +34,12 @@ export default function Home() {
               <a href="#features" className="hover:text-blue-400 transition">Features</a>
               <a href="#how-it-works" className="hover:text-blue-400 transition">How It Works</a>
               <a href="#stakeholders" className="hover:text-blue-400 transition">For Businesses</a>
-              <button className="px-4 py-2 rounded-lg border border-blue-500 hover:bg-blue-500/10 transition">
+              <Link href="/login" className="px-4 py-2 rounded-lg border border-blue-500 hover:bg-blue-500/10 transition">
                 Login
-              </button>
-              <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:shadow-blue-500/50 transition">
+              </Link>
+              <Link href="/signup" className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:shadow-blue-500/50 transition">
                 Register
-              </button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -58,12 +59,12 @@ export default function Home() {
               <a href="#features" className="block py-2 hover:text-blue-400">Features</a>
               <a href="#how-it-works" className="block py-2 hover:text-blue-400">How It Works</a>
               <a href="#stakeholders" className="block py-2 hover:text-blue-400">For Businesses</a>
-              <button className="w-full px-4 py-2 rounded-lg border border-blue-500 mb-2">
+              <Link href="/login" className="block w-full px-4 py-2 rounded-lg border border-blue-500 mb-2 text-center">
                 Login
-              </button>
-              <button className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
+              </Link>
+              <Link href="/signup" className="block w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-center">
                 Register
-              </button>
+              </Link>
             </div>
           </div>
         )}
@@ -93,14 +94,14 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-2xl hover:shadow-blue-500/50 transition text-lg font-semibold flex items-center justify-center gap-2">
+              <Link href="/products/register" className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-2xl hover:shadow-blue-500/50 transition text-lg font-semibold flex items-center justify-center gap-2">
                 Register Your Product
                 <ChevronRight className="w-5 h-5" />
-              </button>
-              <button className="px-8 py-4 rounded-lg border-2 border-slate-700 hover:border-blue-500 transition text-lg font-semibold flex items-center justify-center gap-2">
+              </Link>
+              <Link href="/products/verify" className="px-8 py-4 rounded-lg border-2 border-slate-700 hover:border-blue-500 transition text-lg font-semibold flex items-center justify-center gap-2">
                 <QrCode className="w-5 h-5" />
                 Verify Product
-              </button>
+              </Link>
             </div>
 
             {/* Stats */}
@@ -340,12 +341,12 @@ export default function Home() {
             Join thousands of businesses building trust with blockchain transparency
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 rounded-lg bg-white text-blue-600 hover:shadow-2xl transition text-lg font-semibold">
+            <Link href="/signup" className="px-8 py-4 rounded-lg bg-white text-blue-600 hover:shadow-2xl transition text-lg font-semibold">
               Start Free Trial
-            </button>
-            <button className="px-8 py-4 rounded-lg border-2 border-white text-white hover:bg-white/10 transition text-lg font-semibold">
-              Schedule Demo
-            </button>
+            </Link>
+            <Link href="/products/register" className="px-8 py-4 rounded-lg border-2 border-white text-white hover:bg-white/10 transition text-lg font-semibold">
+              Register Product
+            </Link>
           </div>
         </div>
       </section>
