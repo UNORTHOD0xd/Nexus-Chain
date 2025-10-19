@@ -1,10 +1,12 @@
 {
   "productRegistry": {
     "address": "UPDATE_AFTER_DEPLOYMENT",
-    "network": "mumbai"
+    "network": "sepolia",
+    "chainId": 11155111
   },
   "paymentEscrow": {
     "address": "UPDATE_AFTER_DEPLOYMENT",
-    "network": "mumbai"
+    "network": "sepolia",
+    "chainId": 11155111
   }
 }

@@ -88,11 +88,10 @@ export const WS_EVENTS = {
 
 // Blockchain configuration
 export const BLOCKCHAIN = {
-  SEPOLIA_CHAIN_ID: 11155111,
+  CHAIN_ID: 11155111, // Sepolia Testnet
+  NETWORK_NAME: 'Sepolia',
   BLOCK_CONFIRMATIONS: 2,
-  GAS_LIMIT_MULTIPLIER: 1.2,
-  // Legacy support
-  POLYGON_MUMBAI_CHAIN_ID: 80001
+  GAS_LIMIT_MULTIPLIER: 1.2
 };
 
 // Local storage keys

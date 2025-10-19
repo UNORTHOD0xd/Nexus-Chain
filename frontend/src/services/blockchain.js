@@ -53,7 +53,7 @@ class BlockchainService {
       this.chainId = Number(network.chainId);
 
       // Verify correct network (Sepolia)
-      if (this.chainId !== BLOCKCHAIN.SEPOLIA_CHAIN_ID) {
+      if (this.chainId !== BLOCKCHAIN.CHAIN_ID) {
         console.warn(ERROR_MESSAGES.WRONG_NETWORK);
         // Optionally auto-switch network here
       }

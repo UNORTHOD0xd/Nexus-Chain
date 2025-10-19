@@ -3,7 +3,7 @@
 ![NexusChain Banner](https://via.placeholder.com/1200x300/0EA5E9/FFFFFF?text=NexusChain+-+Where+Trust+Meets+Transparency)
 
 [![Hackathon](https://img.shields.io/badge/Hackathon-Intellibus%20AI%202025-blue)](https://intellibushackathon.com)
-[![Polygon](https://img.shields.io/badge/Blockchain-Polygon-8247E5)](https://polygon.technology/)
+[![Ethereum](https://img.shields.io/badge/Blockchain-Ethereum%20Sepolia-627EEA)](https://ethereum.org/)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.19-363636)](https://soliditylang.org/)
 [![React](https://img.shields.io/badge/React-18.2-61DAFB)](https://react.dev/)
 
@@ -36,7 +36,7 @@ NexusChain creates a universal connection point where blockchain immutability me
 ### Core Innovation
 
 🔗 **Blockchain Truth Layer**
-- Every product registered on Polygon blockchain with unique ID
+- Every product registered on Ethereum Sepolia testnet with unique ID
 - Immutable record that mathematically cannot be tampered with  
 - Smart contracts automate payments and enforce compliance
 
@@ -100,8 +100,8 @@ NexusChain creates a universal connection point where blockchain immutability me
        │              │                    │
        ↓              ↓                    ↓
 ┌──────────┐   ┌─────────────┐    ┌──────────────┐
-│PostgreSQL│   │   Polygon   │    │ IPFS Storage │
-│   Data   │   │  Blockchain │    │  Documents   │
+│PostgreSQL│   │  Sepolia    │    │ IPFS Storage │
+│   Data   │   │ Blockchain  │    │  Documents   │
 └──────────┘   └─────────────┘    └──────────────┘
                │
                ├─ ProductRegistry.sol (Core tracking)
@@ -116,7 +116,7 @@ NexusChain creates a universal connection point where blockchain immutability me
 |-------|-----------|---------|
 | **Blockchain** | Solidity 0.8.19 | Smart contract logic |
 | | Foundry | Development & testing |
-| | Polygon Mumbai | Fast, low-cost transactions |
+| | Ethereum Sepolia | Ethereum testnet for development |
 | | Ethers.js | Web3 integration |
 | **Backend** | Node.js + Express | REST API server |
 | | Socket.io | Real-time WebSocket events |
@@ -137,7 +137,7 @@ NexusChain creates a universal connection point where blockchain immutability me
 ### Prerequisites
 - Node.js 18+
 - PostgreSQL 14+
-- MetaMask wallet with Mumbai testnet MATIC
+- MetaMask wallet with Sepolia testnet ETH
 - Git
 
 ### 1. Clone & Install
@@ -151,9 +151,9 @@ cd nexuschain
 cd blockchain
 npm install
 cp .env.example .env
-# Add PRIVATE_KEY and POLYGON_RPC_URL to .env
-npx hardhat compile
-npx hardhat run scripts/deploy.js --network mumbai
+# Add PRIVATE_KEY and SEPOLIA_RPC_URL to .env
+forge build
+forge script script/Deploy.s.sol:DeployAll --rpc-url $SEPOLIA_RPC --broadcast
 # Save contract addresses from output
 ```
 
@@ -230,9 +230,9 @@ Our demo shows:
 
 ## 🧪 Smart Contracts
 
-### Deployed on Polygon Mumbai Testnet
+### Deployed on Sepolia Testnet
 
-**ProductRegistry.sol** - [View on PolygonScan](https://mumbai.polygonscan.com/address/YOUR_ADDRESS)
+**ProductRegistry.sol** - [View on Etherscan](https://sepolia.etherscan.io/address/YOUR_ADDRESS)
 ```solidity
 // Core functions
 registerProduct(name, batchNumber) → returns productId
@@ -241,7 +241,7 @@ transferOwnership(productId, newHolder)
 verifyProduct(productId) → returns (authentic, checkpoints)
 ```
 
-**PaymentEscrow.sol** - [View on PolygonScan](https://mumbai.polygonscan.com/address/YOUR_ADDRESS)
+**PaymentEscrow.sol** - [View on Etherscan](https://sepolia.etherscan.io/address/YOUR_ADDRESS)
 ```solidity
 // Payment automation
 createEscrow(productId, payee, amount)
@@ -320,14 +320,14 @@ refundPayment(escrowId) → handles disputes
 ## 🗺️ Roadmap
 
 ### ✅ Phase 1: Hackathon MVP (Completed in 24 hours)
-- Smart contract deployment on Polygon Mumbai
+- Smart contract deployment on Sepolia testnet
 - Real-time tracking with WebSocket updates
 - Consumer QR verification system
 - Interactive supply chain visualization
 - Automated payment escrow
 
 ### 🔜 Phase 2: Production Ready (Next 3 months)
-- Mainnet deployment on Polygon PoS
+- Mainnet deployment on Ethereum
 - Native mobile apps (iOS/Android)
 - Real IoT sensor integration
 - Multi-language support (Spanish, French, Mandarin)
@@ -401,7 +401,7 @@ Building NexusChain in 24 hours taught us:
 
 **Technical:**
 - Integrating blockchain with real-time systems requires careful async handling
-- Polygon Mumbai's fast block times (<2s) enable true real-time UX
+- Sepolia's ~12s block times provide reliable testnet environment
 - WebSocket event architecture scales better than polling for live updates
 - Smart contract gas optimization matters even on cheap networks
 
@@ -421,7 +421,7 @@ Building NexusChain in 24 hours taught us:
 
 Special thanks to:
 - **Intellibus** for hosting an incredible 24-hour hackathon in Kingston, Jamaica
-- **Polygon** for providing fast, affordable blockchain infrastructure
+- **Ethereum Foundation** for providing robust testnet infrastructure
 - **OpenStreetMap contributors** for mapping data
 - **Our mentors** for guidance on blockchain architecture and product-market fit
 - **AC Hotel Kingston** for the amazing venue and hospitality
