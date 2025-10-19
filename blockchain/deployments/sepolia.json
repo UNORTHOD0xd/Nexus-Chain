@@ -1,0 +1,25 @@
+{
+  "network": "Sepolia Testnet",
+  "chainId": 11155111,
+  "deploymentDate": "2025-10-19T11:06:00Z",
+  "deployer": "0xF31A99A843bA137e19b4146c4FEa19B5A6f0c435",
+  "contracts": {
+    "ProductRegistry": {
+      "address": "0xe0c52095175ba416b886D1Bda6A4F71F1958c8b2",
+      "verified": true,
+      "etherscan": "https://sepolia.etherscan.io/address/0xe0c52095175ba416b886d1bda6a4f71f1958c8b2"
+    },
+    "PaymentEscrow": {
+      "address": "0x416133e08B0cC8804bf5A00f0e3569D4A378EB63",
+      "verified": true,
+      "etherscan": "https://sepolia.etherscan.io/address/0x416133e08b0cc8804bf5a00f0e3569d4a378eb63",
+      "constructorArgs": {
+        "productRegistry": "0xe0c52095175ba416b886D1Bda6A4F71F1958c8b2"
+      }
+    }
+  },
+  "gasUsed": 9168923,
+  "estimatedCost": "0.000009168923 ETH",
+  "rpcEndpoint": "https://sepolia.infura.io/v3/***",
+  "notes": "Initial MVP deployment to Sepolia testnet. Both contracts successfully verified on Etherscan."
+}

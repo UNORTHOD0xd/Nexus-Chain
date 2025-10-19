@@ -5,12 +5,12 @@
 
 import { ethers } from 'ethers';
 import { BLOCKCHAIN, ERROR_MESSAGES } from '@/utils/constants';
+import ProductRegistryArtifact from '@/contracts/ProductRegistry.json';
+import PaymentEscrowArtifact from '@/contracts/PaymentEscrow.json';
 
-// Contract ABIs - These will be populated after contract deployment
-// For now, we'll use placeholder empty arrays
-// TODO: Import actual ABIs after running `forge build`
-const ProductRegistryABI = [];
-const PaymentEscrowABI = [];
+// Contract ABIs imported from deployed contracts
+const ProductRegistryABI = ProductRegistryArtifact.abi;
+const PaymentEscrowABI = PaymentEscrowArtifact.abi;
 
 class BlockchainService {
   constructor() {
