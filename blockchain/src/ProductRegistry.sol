@@ -57,6 +57,9 @@ contract ProductRegistry {
     /// @dev Thrown when attempting an invalid status transition
     error ProductRegistry__InvalidStatusTransition();
 
+    /// @dev Thrown when caller is not the current holder of the product
+    error ProductRegistry__NotCurrentHolder();
+
     /// @dev Thrown when temperature is outside acceptable range
     error ProductRegistry__TemperatureOutOfRange(int256 temperature, int256 minTemp, int256 maxTemp);
 
@@ -177,6 +180,12 @@ contract ProductRegistry {
     /// @dev Flag to pause contract operations in case of emergency
     bool private s_paused;
 
+    /// @dev Pending owner for two-step ownership transfer
+    address private s_pendingOwner;
+
+    /// @dev Maximum string length for product names and locations to prevent DOS
+    uint256 private constant MAX_STRING_LENGTH = 256;
+
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
@@ -243,6 +252,12 @@ contract ProductRegistry {
     event RoleAssigned(address indexed user, Role role);
 
     /**
+     * @dev Emitted when a user is revoked from the system
+     * @param user Address of the user
+     */
+    event UserRevoked(address indexed user);
+
+    /**
      * @dev Emitted when temperature is outside acceptable range
      * @param productId Product identifier
      * @param temperature Recorded temperature
@@ -273,6 +288,12 @@ contract ProductRegistry {
      * @param newOwner New owner address
      */
     event OwnerTransferred(address indexed previousOwner, address indexed newOwner);
+
+    /**
+     * @dev Emitted when a new pending owner is nominated
+     * @param pendingOwner Address of the pending owner
+     */
+    event OwnershipTransferInitiated(address indexed pendingOwner);
 
     /*//////////////////////////////////////////////////////////////
                                MODIFIERS
@@ -354,7 +375,12 @@ contract ProductRegistry {
         onlyRole(Role.Manufacturer)
         returns (uint256 productId)
     {
-        if (bytes(_name).length == 0 || bytes(_batchNumber).length == 0) {
+        if (
+            bytes(_name).length == 0 ||
+            bytes(_batchNumber).length == 0 ||
+            bytes(_name).length > MAX_STRING_LENGTH ||
+            bytes(_batchNumber).length > MAX_STRING_LENGTH
+        ) {
             revert ProductRegistry__InvalidProductData();
         }
 
@@ -408,7 +434,11 @@ contract ProductRegistry {
         whenNotPaused
         productExists(_productId)
     {
-        if (bytes(_location).length == 0) {
+        if (
+            bytes(_location).length == 0 ||
+            bytes(_location).length > MAX_STRING_LENGTH ||
+            bytes(_notes).length > MAX_STRING_LENGTH * 2
+        ) {
             revert ProductRegistry__InvalidCheckpointData();
         }
 
@@ -461,6 +491,11 @@ contract ProductRegistry {
         validAddress(_newHolder)
     {
         Product storage product = s_products[_productId];
+
+        // Only current holder or contract owner can transfer ownership
+        if (msg.sender != product.currentHolder && msg.sender != s_owner) {
+            revert ProductRegistry__NotCurrentHolder();
+        }
 
         if (product.currentHolder == _newHolder) {
             revert ProductRegistry__AlreadyCurrentHolder();
@@ -526,8 +561,8 @@ contract ProductRegistry {
     }
 
     /**
-     * @notice Transfers contract ownership to a new owner
-     * @dev Only current owner can transfer ownership
+     * @notice Initiates ownership transfer to a new owner (step 1 of 2)
+     * @dev Two-step process to prevent accidental transfers to wrong address
      * @param _newOwner Address of the new owner
      */
     function transferContractOwnership(
@@ -537,10 +572,63 @@ contract ProductRegistry {
         onlyOwner
         validAddress(_newOwner)
     {
-        address previousOwner = s_owner;
-        s_owner = _newOwner;
+        s_pendingOwner = _newOwner;
+        emit OwnershipTransferInitiated(_newOwner);
+    }
 
-        emit OwnerTransferred(previousOwner, _newOwner);
+    /**
+     * @notice Accepts ownership transfer (step 2 of 2)
+     * @dev Only the pending owner can accept the ownership transfer
+     */
+    function acceptOwnership() external {
+        if (msg.sender != s_pendingOwner) {
+            revert ProductRegistry__Unauthorized();
+        }
+
+        address previousOwner = s_owner;
+        s_owner = s_pendingOwner;
+        s_pendingOwner = address(0);
+
+        emit OwnerTransferred(previousOwner, s_owner);
+    }
+
+    /**
+     * @notice Revokes a user's access to the system
+     * @dev Only the contract owner can revoke users, sets role to None and removes authorization
+     * @param _user Address of the user to revoke
+     */
+    function revokeUser(address _user) external onlyOwner validAddress(_user) {
+        s_userRoles[_user] = Role.None;
+        s_authorizedUsers[_user] = false;
+
+        emit UserRevoked(_user);
+    }
+
+    /**
+     * @notice Batch assigns roles to multiple users
+     * @dev Only the contract owner can batch assign roles, useful for initial setup
+     * @param _users Array of user addresses
+     * @param _roles Array of roles corresponding to each user
+     */
+    function batchAssignRoles(
+        address[] calldata _users,
+        Role[] calldata _roles
+    )
+        external
+        onlyOwner
+    {
+        if (_users.length != _roles.length || _users.length == 0) {
+            revert ProductRegistry__InvalidProductData();
+        }
+
+        for (uint256 i = 0; i < _users.length; i++) {
+            if (_users[i] == address(0)) {
+                revert ProductRegistry__InvalidAddress();
+            }
+            s_userRoles[_users[i]] = _roles[i];
+            s_authorizedUsers[_users[i]] = true;
+            emit RoleAssigned(_users[i], _roles[i]);
+        }
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -679,6 +767,76 @@ contract ProductRegistry {
                 compliant = false;
                 break;
             }
+        }
+    }
+
+    /**
+     * @notice Gets pending owner address
+     * @return Address of pending owner (address(0) if none)
+     */
+    function getPendingOwner() external view returns (address) {
+        return s_pendingOwner;
+    }
+
+    /**
+     * @notice Gets products by manufacturer
+     * @dev Returns array of product IDs created by a specific manufacturer
+     * @param _manufacturer Address of the manufacturer
+     * @param _maxResults Maximum number of results to return
+     * @return productIds Array of product IDs
+     */
+    function getProductsByManufacturer(
+        address _manufacturer,
+        uint256 _maxResults
+    )
+        external
+        view
+        returns (uint256[] memory productIds)
+    {
+        uint256 count = 0;
+        uint256[] memory tempIds = new uint256[](_maxResults);
+
+        for (uint256 i = 0; i < s_productCounter && count < _maxResults; i++) {
+            if (s_products[i].manufacturer == _manufacturer && s_products[i].exists) {
+                tempIds[count] = i;
+                count++;
+            }
+        }
+
+        productIds = new uint256[](count);
+        for (uint256 i = 0; i < count; i++) {
+            productIds[i] = tempIds[i];
+        }
+    }
+
+    /**
+     * @notice Gets products by current status
+     * @dev Returns array of product IDs with a specific status
+     * @param _status Status to filter by
+     * @param _maxResults Maximum number of results to return
+     * @return productIds Array of product IDs
+     */
+    function getProductsByStatus(
+        Status _status,
+        uint256 _maxResults
+    )
+        external
+        view
+        returns (uint256[] memory productIds)
+    {
+        uint256 count = 0;
+        uint256[] memory tempIds = new uint256[](_maxResults);
+
+        for (uint256 i = 0; i < s_productCounter && count < _maxResults; i++) {
+            if (s_products[i].currentStatus == _status && s_products[i].exists) {
+                tempIds[count] = i;
+                count++;
+            }
+        }
+
+        productIds = new uint256[](count);
+        for (uint256 i = 0; i < count; i++) {
+            productIds[i] = tempIds[i];
         }
     }
 
