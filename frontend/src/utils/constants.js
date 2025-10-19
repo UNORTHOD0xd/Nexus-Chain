@@ -88,9 +88,11 @@ export const WS_EVENTS = {
 
 // Blockchain configuration
 export const BLOCKCHAIN = {
-  POLYGON_MUMBAI_CHAIN_ID: 80001,
+  SEPOLIA_CHAIN_ID: 11155111,
   BLOCK_CONFIRMATIONS: 2,
-  GAS_LIMIT_MULTIPLIER: 1.2
+  GAS_LIMIT_MULTIPLIER: 1.2,
+  // Legacy support
+  POLYGON_MUMBAI_CHAIN_ID: 80001
 };
 
 // Local storage keys
@@ -109,7 +111,7 @@ export const ERROR_MESSAGES = {
   NOT_FOUND: 'Resource not found.',
   SERVER_ERROR: 'Server error. Please try again later.',
   METAMASK_NOT_INSTALLED: 'MetaMask is not installed. Please install it to continue.',
-  WRONG_NETWORK: 'Please switch to Polygon Mumbai testnet.',
+  WRONG_NETWORK: 'Please switch to Sepolia testnet.',
   TRANSACTION_REJECTED: 'Transaction was rejected.',
   INVALID_QR_CODE: 'Invalid QR code format. Expected format: NEXUS-{id}'
 };

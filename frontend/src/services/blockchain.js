@@ -52,8 +52,8 @@ class BlockchainService {
       const network = await this.provider.getNetwork();
       this.chainId = Number(network.chainId);
 
-      // Verify correct network (Polygon Mumbai)
-      if (this.chainId !== BLOCKCHAIN.POLYGON_MUMBAI_CHAIN_ID) {
+      // Verify correct network (Sepolia)
+      if (this.chainId !== BLOCKCHAIN.SEPOLIA_CHAIN_ID) {
         console.warn(ERROR_MESSAGES.WRONG_NETWORK);
         // Optionally auto-switch network here
       }
@@ -317,9 +317,9 @@ class BlockchainService {
   }
 
   /**
-   * Switch to Polygon Mumbai network
+   * Switch to Sepolia network
    */
-  async switchToMumbai() {
+  async switchToSepolia() {
     if (!this.isMetaMaskInstalled()) {
       throw new Error(ERROR_MESSAGES.METAMASK_NOT_INSTALLED);
     }
@@ -327,7 +327,7 @@ class BlockchainService {
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x13881' }] // 80001 in hex
+        params: [{ chainId: '0xaa36a7' }] // 11155111 in hex
       });
     } catch (error) {
       // Chain not added, add it
@@ -336,15 +336,15 @@ class BlockchainService {
           method: 'wallet_addEthereumChain',
           params: [
             {
-              chainId: '0x13881',
-              chainName: 'Polygon Mumbai Testnet',
+              chainId: '0xaa36a7',
+              chainName: 'Sepolia Testnet',
               nativeCurrency: {
-                name: 'MATIC',
-                symbol: 'MATIC',
+                name: 'SepoliaETH',
+                symbol: 'ETH',
                 decimals: 18
               },
-              rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-              blockExplorerUrls: ['https://mumbai.polygonscan.com/']
+              rpcUrls: ['https://ethereum-sepolia-rpc.publicnode.com'],
+              blockExplorerUrls: ['https://sepolia.etherscan.io/']
             }
           ]
         });
@@ -352,6 +352,11 @@ class BlockchainService {
         throw error;
       }
     }
+  }
+
+  // Alias for backward compatibility
+  async switchToMumbai() {
+    return this.switchToSepolia();
   }
 }
 

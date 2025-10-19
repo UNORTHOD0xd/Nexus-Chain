@@ -67,7 +67,8 @@ After installation, you need to configure your environment variables:
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:3000
    NEXT_PUBLIC_SOCKET_URL=http://localhost:3000
-   NEXT_PUBLIC_POLYGON_RPC_URL=https://rpc-mumbai.maticvigil.com
+   NEXT_PUBLIC_SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
+   NEXT_PUBLIC_CHAIN_ID=11155111
    NEXT_PUBLIC_PRODUCT_REGISTRY_ADDRESS=<contract_address_after_deployment>
    NEXT_PUBLIC_PAYMENT_ESCROW_ADDRESS=<contract_address_after_deployment>
    ```

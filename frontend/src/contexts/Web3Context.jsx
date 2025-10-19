@@ -168,14 +168,14 @@ export function Web3Provider({ children }) {
   }, []);
 
   /**
-   * Switch to Polygon Mumbai network
+   * Switch to Sepolia network
    */
-  const switchToMumbai = useCallback(async () => {
+  const switchToSepolia = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      await blockchainService.switchToMumbai();
+      await blockchainService.switchToSepolia();
 
       return { success: true };
     } catch (error) {
@@ -199,7 +199,7 @@ export function Web3Provider({ children }) {
     addCheckpoint,
     getProduct,
     getCheckpoints,
-    switchToMumbai,
+    switchToSepolia,
     blockchainService // Expose service for advanced usage
   };
 
