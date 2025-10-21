@@ -15,7 +15,7 @@
 > 
 > A blockchain-powered real-time supply chain platform that eliminates counterfeit products and creates a universal nexus of trust connecting manufacturers, logistics, retailers, and consumers.
 
-**[Smart Contracts on Etherscan](https://sepolia.etherscan.io/address/0xe0c52095175ba416b886D1Bda6A4F71F1958c8b2)** · **[Documentation](./ENV_SETUP.md)** · **[Deployment Guide](./DEPLOYMENT.md)**
+**[Smart Contracts on Etherscan](https://sepolia.etherscan.io/address/0xe0c52095175ba416b886D1Bda6A4F71F1958c8b2)** · **[Project Status](./PROJECT_STATUS.md)** · **[Production Deployment](./DEPLOYMENT_PRODUCTION.md)**
 
 ---
 
@@ -276,13 +276,12 @@ npm run dev      # Runs on http://localhost:3001
 
 ### 🚀 Production Deployment
 
-Ready to deploy? See [DEPLOYMENT.md](./DEPLOYMENT.md) for:
-- Vercel + Railway deployment (easiest)
-- AWS/GCP/Azure deployment
-- Docker deployment on VPS
-- Full CI/CD pipeline
+**Ready to go live?** Follow our comprehensive guides:
 
-**MVP Checklist:** [MVP_CHECKLIST.md](./MVP_CHECKLIST.md)
+- **[DEPLOYMENT_PRODUCTION.md](./DEPLOYMENT_PRODUCTION.md)** - Complete production deployment strategy (Vercel + Railway)
+- **[PROJECT_STATUS.md](./PROJECT_STATUS.md)** - Current project status and what's completed
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Alternative deployment options
+- **[MVP_CHECKLIST.md](./MVP_CHECKLIST.md)** - Pre-deployment checklist
 
 ---
 
@@ -468,22 +467,51 @@ refundPayment(escrowId) → handles disputes
 
 ---
 
-## 👥 Team & Contribution
+## 👥 Team & Contributors
 
 **Built for Intellibus AI Hackathon 2025**
 
-**Developer:** UNORTHOD0xd
-- Full-stack blockchain development
-- Smart contract architecture (Solidity + Foundry)
-- Backend API design (Node.js + Express + Prisma)
-- Frontend development (Next.js + React + Tailwind)
-- DevOps & deployment (Docker + CI/CD)
+### Core Team
+
+ ([@UNORTHOD0xd](https://github.com/UNORTHOD0xd)) - Lead Blockchain Engineer
+- Smart contract architecture & deployment (Solidity + Foundry)
+- Blockchain integration & Web3 connectivity (Ethers.js)
+- Docker containerization & deployment infrastructure
+- Sepolia testnet deployment & contract verification
+- Frontend-blockchain integration
+- **27 commits** - Primary contributor
+
+**Davon Bourne** - Lead Full-Stack Engineer
+- Backend API design & implementation (Node.js + Express + Prisma)
+- Testing infrastructure & test suite (30 tests implemented)
+- Documentation & technical writing
+- Database architecture & migrations (PostgreSQL + Prisma)
+- CI/CD pipeline setup (GitHub Actions)
+- Demo planning & hackathon presentation materials
+- **22 commits** - Core infrastructure
+
+### Contributions
+
+**Total Commits:** 53 commits across 2 days of intensive development
+
+**Key Contributions by Area:**
+- **Blockchain & Smart Contracts:** @UNORTHOD0xd
+- **Backend & API:** Davon Bourne
+- **Testing & QA:** Davon Bourne
+- **Docker & DevOps:** @UNORTHOD0xd
+- **Documentation:** Both team members
+- **Frontend:** Dorien Bourne
+- **Database:** @UNORTHOD0xd
+
+### Open Source
 
 **Contributions Welcome!** This is an open-source project. Feel free to:
 - Report issues
 - Submit pull requests
 - Suggest features
 - Improve documentation
+
+See our [GitHub repository](https://github.com/UNORTHOD0xd/Nexus-Chain) to get involved!
 
 ---
 
@@ -610,6 +638,30 @@ GET /products/:id
 
 ---
 
+## 💪 Challenges We Faced
+
+Building NexusChain wasn't without its obstacles. Despite a 24-hour timeline, we encountered significant technical challenges:
+
+**Infrastructure Issues:**
+- **Internet Connectivity** - The venue experienced ISP outages during critical development phases, forcing us to work offline and queue deployments
+- **Hardware Failures** - Laptop issues mid-hackathon required quick pivots and code migration under pressure
+- **Deployment Constraints** - Post-event deployment problems limited initial public exposure and demo availability
+
+**Impact:**
+These challenges cost us valuable development time and prevented us from showcasing the full platform during the judging period. However, they also taught us resilience and creative problem-solving under pressure.
+
+**Our Response:**
+Despite these setbacks, we refused to compromise on ambition. NexusChain remains one of the most technically comprehensive projects submitted to the hackathon, featuring:
+- Full-stack blockchain integration (smart contracts + backend + frontend)
+- Production-grade architecture with Docker, CI/CD, and testing
+- Real-world use case addressing a $4.2 trillion problem
+- Complete end-to-end supply chain tracking system
+
+**Looking Forward:**
+We're committed to continuing development beyond the hackathon. The deployment issues are being resolved, and we're working toward a public launch that will demonstrate the full potential of blockchain-powered supply chain transparency. This is just the beginning.
+
+---
+
 ## 🎓 What We Learned
 
 Building NexusChain in 24 hours taught us:
@@ -619,16 +671,19 @@ Building NexusChain in 24 hours taught us:
 - Sepolia's ~12s block times provide reliable testnet environment
 - WebSocket event architecture scales better than polling for live updates
 - Smart contract gas optimization matters even on cheap networks
+- Always have offline development workflows and backup plans
 
 **Product:**
 - Visual demos (animated maps) resonate more than feature lists
 - Starting with a clear MVP scope prevented feature creep
 - Temperature monitoring is the killer feature for pharmaceuticals
+- Infrastructure reliability can make or break a demo
 
-**Teamwork:**
-- Clear role division + frequent integration checkpoints = success
-- Regular 6-hour syncs caught issues early
-- Pair programming for complex integrations saved debugging time
+**Resilience:**
+- Technical setbacks reveal true commitment to the vision
+- Working through hardware failures builds stronger problem-solving skills
+- The best projects often face the toughest obstacles
+- Post-hackathon development matters as much as the 24-hour sprint
 
 ---
 
@@ -654,20 +709,14 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) for deta
 
 ### Documentation
 
-#### Testing
-- **[TEST_PLAN.md](./TEST_PLAN.md)** - Comprehensive test plan (500+ test cases)
-- **[TESTING.md](./TESTING.md)** - Developer testing guide
-- **[TEST_QUICK_START.md](./TEST_QUICK_START.md)** - Quick reference for running tests
-- **[FINAL_TEST_SUMMARY.md](./FINAL_TEST_SUMMARY.md)** - Complete testing infrastructure summary
+#### Project Management
+- **[PROJECT_STATUS.md](./PROJECT_STATUS.md)** - Complete project status, what's done and what needs work
+- **[DEPLOYMENT_PRODUCTION.md](./DEPLOYMENT_PRODUCTION.md)** - Step-by-step production deployment plan
 
-#### Demo
-- **[DEMO_PLAN.md](./DEMO_PLAN.md)** - Comprehensive 7-act demo strategy
-- **[DEMO_CHECKLIST.md](./DEMO_CHECKLIST.md)** - Printable demo day checklist
-
-#### Deployment
-- **[ENV_SETUP.md](./ENV_SETUP.md)** - Complete environment configuration guide
+#### Setup Guides
+- **[ENV_SETUP.md](./ENV_SETUP.md)** - Environment configuration guide
 - **[DOCKER.md](./DOCKER.md)** - Docker setup and troubleshooting
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Production deployment guide
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Alternative deployment options
 - **[MVP_CHECKLIST.md](./MVP_CHECKLIST.md)** - Deployment readiness checklist
 
 #### API & Architecture
@@ -703,7 +752,7 @@ Having issues? Here's how to get help:
    - **Build errors**: Delete node_modules and reinstall: `rm -rf node_modules && npm install`
    - **Port conflicts**: Backend runs on 3000, Frontend on 3001 - make sure ports are free
 
-## ⭐ Support NexusChain
+## ⭐ Support Nexus-Chain
 
 If you believe in transparent, trustworthy supply chains, please:
 - ⭐ **Star this repo** on GitHub
