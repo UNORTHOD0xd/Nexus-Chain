@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexuschain-postgres
+    environment:
+      - POSTGRES_USER=nexuschain
+      - POSTGRES_PASSWORD=nexuschain_dev_password
+      - POSTGRES_DB=nexuschain
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexuschain"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexuschain-network
+
   # Backend API
   backend:
     build:
@@ -12,8 +33,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - DATABASE_URL=${DATABASE_URL}
-      - DIRECT_URL=${DIRECT_URL}
+      - DATABASE_URL=postgresql://nexuschain:nexuschain_dev_password@postgres:5432/nexuschain
+      - DIRECT_URL=postgresql://nexuschain:nexuschain_dev_password@postgres:5432/nexuschain
       - JWT_SECRET=${JWT_SECRET}
       - FRONTEND_URL=http://localhost:3001
       - SEPOLIA_RPC_URL=${SEPOLIA_RPC_URL}
@@ -23,6 +44,9 @@ services:
       - LOG_LEVEL=info
     volumes:
       - ./backend/logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
@@ -67,4 +91,5 @@ networks:
     driver: bridge
 
 volumes:
+  postgres-data:
   backend-logs:

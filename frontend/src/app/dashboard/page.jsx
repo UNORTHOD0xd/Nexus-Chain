@@ -30,7 +30,16 @@ export default function DashboardPage() {
     refetch,
   } = useQuery({
     queryKey: ['products', user?.id],
-    queryFn: () => productsAPI.getAll(),
+    queryFn: async () => {
+      try {
+        const response = await productsAPI.getAll();
+        console.log('Products API Response:', response);
+        return response;
+      } catch (err) {
+        console.error('Products API Error:', err);
+        throw err;
+      }
+    },
     enabled: !!user,
     staleTime: 60000, // 1 minute
   });
@@ -43,18 +52,37 @@ export default function DashboardPage() {
     );
   }
 
-  // Extract products array from response
-  const productsArray = products?.data?.products || products?.products || [];
+  // Extract products array from response with extensive safety checks
+  let productsArray = [];
+
+  if (products) {
+    console.log('Products data structure:', products);
+
+    if (Array.isArray(products)) {
+      productsArray = products;
+    } else if (Array.isArray(products.data?.products)) {
+      productsArray = products.data.products;
+    } else if (Array.isArray(products.products)) {
+      productsArray = products.products;
+    } else if (Array.isArray(products.data)) {
+      productsArray = products.data;
+    } else {
+      console.warn('Unexpected products data structure:', products);
+      productsArray = [];
+    }
+  }
 
   // Filter products based on search and status
   const filteredProducts = productsArray.filter((product) => {
+    if (!product) return false;
+
     const matchesSearch =
       !searchQuery ||
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.productId.toLowerCase().includes(searchQuery.toLowerCase());
+      (product.name && product.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (product.productId && product.productId.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesStatus =
-      statusFilter === 'ALL' || product.currentStatus === statusFilter;
+      statusFilter === 'ALL' || product.currentStatus === statusFilter || product.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
